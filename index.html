@@ -3,48 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dorksense | Logic for the Illogical</title>
+    <title>LEIFIYO /// NEXUS</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500&family=JetBrains+Mono:wght@400;800&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Koulen&display=swap" rel="stylesheet">
     
     <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
-    <!-- Tailwind (configured inline) -->
+    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+
+    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        'neo-bg': '#FFFAE5',
-                        'neo-main': '#FF4D00', // Intense Orange
-                        'neo-accent': '#A3FF00', // Acid Green
-                        'neo-purple': '#9D00FF',
-                        'neo-black': '#0f0f0f',
-                        'neo-white': '#ffffff',
-                        'neo-blue': '#0047FF'
-                    },
                     fontFamily: {
                         'display': ['"Syne"', 'sans-serif'],
-                        'body': ['"Space Grotesk"', 'sans-serif'],
-                        'heavy': ['"Archivo Black"', 'sans-serif'],
+                        'body': ['"Inter"', 'sans-serif'],
+                        'code': ['"JetBrains Mono"', 'monospace'],
+                        'condensed': ['"Koulen"', 'sans-serif'],
                     },
-                    boxShadow: {
-                        'neo': '8px 8px 0px 0px #0f0f0f',
-                        'neo-sm': '4px 4px 0px 0px #0f0f0f',
-                        'neo-lg': '12px 12px 0px 0px #0f0f0f',
-                        'neo-hover': '12px 12px 0px 0px #0f0f0f',
-                        'neo-active': '2px 2px 0px 0px #0f0f0f',
+                    colors: {
+                        'void': '#050505',
+                        'glass': 'rgba(255, 255, 255, 0.03)',
+                        'glass-border': 'rgba(255, 255, 255, 0.08)',
+                        'neon-purple': '#b026ff',
+                        'toxic': '#ccff00',
+                        'chrome': '#e0e0e0',
+                        'tiktok-cyan': '#69C9D0',
+                        'tiktok-pink': '#EE1D52',
                     },
-                    spacing: {
-                        '128': '32rem',
+                    backgroundImage: {
+                        'gradient-glow': 'radial-gradient(circle at 50% 50%, rgba(176, 38, 255, 0.15) 0%, rgba(3, 3, 3, 0) 50%)',
                     },
-                    cursor: {
-                        'none': 'none',
+                    animation: {
+                        'scan': 'scan 2s linear infinite',
+                    },
+                    keyframes: {
+                        scan: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' }
+                        }
                     }
                 }
             }
@@ -52,536 +58,440 @@
     </script>
 
     <style>
-        /* Base Setup */
-        body {
-            background-color: #FFFAE5;
-            color: #0f0f0f;
-            overflow-x: hidden;
-            cursor: none; /* Custom cursor handling */
-        }
-
-        ::selection {
-            background-color: #0f0f0f;
-            color: #A3FF00;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 16px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #FFFAE5;
-            border-left: 3px solid #0f0f0f;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #0f0f0f;
-            border: 3px solid #FFFAE5;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #FF4D00;
-        }
-
-        /* Utilities */
-        .text-outline {
-            -webkit-text-stroke: 2px #0f0f0f;
-            color: transparent;
-        }
+        :root { --cursor-size: 20px; }
         
-        .text-outline-white {
-            -webkit-text-stroke: 2px #ffffff;
-            color: transparent;
-        }
-
-        .clip-corner {
-            clip-path: polygon(
-                0 0, 
-                100% 0, 
-                100% calc(100% - 20px), 
-                calc(100% - 20px) 100%, 
-                0 100%
-            );
-        }
-
-        .grain {
-            position: fixed;
-            top: 0;
-            left: 0;
+        html, body {
+            background-color: #050505;
+            color: #e0e0e0;
+            overflow-x: hidden;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-            z-index: 9998;
-        }
-
-        /* Marquee Animation */
-        .marquee-container {
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 20s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* Cursor */
-        #cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 24px;
-            height: 24px;
-            background-color: #0f0f0f;
-            border-radius: 0%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-            mix-blend-mode: difference;
         }
         
-        /* Loader */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #0f0f0f;
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        /* Grain Overlay */
+        .grain-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05; pointer-events: none; z-index: 50;
         }
-        .loader-bar {
-            width: 20px;
-            height: 0%;
-            background: #A3FF00;
-            margin: 0 5px;
+
+        /* --- CURSOR --- */
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            #cursor {
+                display: block;
+                position: fixed; top: 0; left: 0; 
+                pointer-events: none; 
+                z-index: 99999;
+            }
+            .cursor-dot {
+                width: 10px; height: 10px; 
+                background: #ccff00; 
+                border-radius: 50%;
+                position: absolute; top: 0; left: 0;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 0 10px #ccff00;
+            }
+            .cursor-ring {
+                width: 40px; height: 40px; 
+                border: 1px solid rgba(204, 255, 0, 0.5); 
+                border-radius: 50%;
+                position: absolute; top: 0; left: 0;
+                transform: translate(-50%, -50%);
+                transition: width 0.2s, height 0.2s, background-color 0.2s;
+            }
         }
+        @media (hover: none) { #cursor { display: none !important; } }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: linear-gradient(180deg, rgba(20,20,20,0.6) 0%, rgba(10,10,10,0.8) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+        .glass-panel:hover {
+            border-color: rgba(204, 255, 0, 0.3);
+            box-shadow: 0 0 30px rgba(204, 255, 0, 0.1);
+        }
+
+        /* --- HEADER TEXT --- */
+        .hero-text {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: clamp(3rem, 13vw, 9rem); 
+            color: #e0e0e0;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+            position: relative;
+            z-index: 20;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .hero-text:hover {
+            color: #ffffff;
+            text-shadow: 2px 2px 0px #ccff00, -2px -2px 0px #b026ff;
+        }
+
+        /* 3D Tilt */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+        .tilt-inner { transform: translateZ(30px); }
+
+        /* --- ENTRY LOADER (Black Screen) --- */
+        .preloader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            z-index: 9998;
+            background: #050505; 
+            color: #ccff00;
+            display: flex; align-items: center; justify-content: center;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+            transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .preloader.loaded { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
+        
+        .scan-line {
+            position: absolute; width: 100%; height: 2px;
+            background: rgba(204, 255, 0, 0.3);
+            box-shadow: 0 0 15px rgba(204, 255, 0, 0.6);
+            animation: scan 2s linear infinite;
+        }
+
+        /* --- EXIT LOADER (Green Swipe) --- */
+        .page-loader {
+            position: fixed; inset: 0; 
+            background: #ccff00; 
+            z-index: 10000; 
+            transform: scaleY(0); 
+            transform-origin: bottom;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none;
+        }
+        .loader-text {
+            font-family: 'Koulen', sans-serif; 
+            font-size: 10vw; 
+            color: black;
+            opacity: 0;
+        }
+
+        ::selection { background: #ccff00; color: #000; }
     </style>
 </head>
-<body class="font-body">
+<body class="antialiased selection:bg-toxic selection:text-black">
 
-    <!-- Grain Overlay -->
-    <div class="grain"></div>
-
-    <!-- Custom Cursor -->
-    <div id="cursor"></div>
-
-    <!-- Loader -->
-    <div id="loader">
-        <div class="flex gap-2 h-32 items-end">
-            <div class="loader-bar"></div>
-            <div class="loader-bar"></div>
-            <div class="loader-bar"></div>
-            <div class="loader-bar"></div>
-            <div class="loader-bar"></div>
-        </div>
-        <h1 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-neo-bg font-display font-bold text-6xl mix-blend-exclusion">LOADING</h1>
+    <!-- EXIT TRANSITION LOADER -->
+    <div class="page-loader">
+        <div class="loader-text">REDIRECTING///</div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full flex justify-between items-center p-4 md:p-8 z-50 pointer-events-none mix-blend-difference text-[#FFFAE5]">
-        <div class="pointer-events-auto group cursor-none">
-            <span class="font-heavy text-3xl md:text-4xl tracking-tighter hover:text-neo-accent transition-colors">DORKSENSE.</span>
+    <!-- ENTRY PRELOADER -->
+    <div class="preloader" id="preloader">
+        <div class="scan-line"></div>
+        <div class="flex flex-col items-center text-center relative z-10">
+            <div class="font-display font-bold text-6xl md:text-9xl tracking-tighter tabular-nums" id="loader-text">0%</div>
+            <div class="font-code text-xs md:text-sm mt-4 text-white/50 animate-pulse">/// LOADING_ASSETS</div>
         </div>
-        <div class="pointer-events-auto hidden md:flex gap-8 font-bold text-lg">
-            <a href="#about" class="hover:line-through decoration-4 decoration-neo-accent">MANIFESTO</a>
-            <a href="#work" class="hover:line-through decoration-4 decoration-neo-accent">CHAOS</a>
-            <a href="#contact" class="border-2 border-[#FFFAE5] px-6 py-2 hover:bg-[#FFFAE5] hover:text-black transition-all duration-300 shadow-none hover:shadow-[4px_4px_0px_0px_#A3FF00]">TALK</a>
-        </div>
-        <!-- Mobile Menu Button (Visual Only for Demo) -->
-        <div class="pointer-events-auto md:hidden border-2 border-[#FFFAE5] p-2">
-            <i data-lucide="menu" class="w-6 h-6"></i>
+    </div>
+
+    <!-- BACKGROUND -->
+    <div class="grain-overlay"></div>
+    <div class="fixed top-[-20%] right-[-10%] w-[600px] h-[600px] bg-neon-purple rounded-full blur-[150px] opacity-10 animate-pulse pointer-events-none"></div>
+    <div class="fixed bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-toxic rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+
+    <!-- CURSOR -->
+    <div id="cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center text-white pointer-events-none mix-blend-difference">
+        <div class="font-display font-extrabold text-xl tracking-tight">LEIFIYO<span class="text-toxic">.EXE</span></div>
+        <div class="font-code text-xs flex gap-4">
+            <span class="hidden md:inline opacity-50">LOC: GERMANY</span>
+            <span class="animate-pulse text-toxic">● ONLINE</span>
         </div>
     </nav>
 
-    <main id="smooth-wrapper">
-        <div id="smooth-content">
-
-            <!-- HERO SECTION -->
-            <section class="relative min-h-screen flex flex-col justify-center items-center pt-20 overflow-hidden border-b-4 border-black bg-neo-bg">
+    <!-- MAIN -->
+    <main class="relative z-10 w-full min-h-screen pt-32 pb-20 px-4 md:px-8">
+        <div class="w-full max-w-6xl mx-auto">
+            
+            <!-- HERO -->
+            <header class="text-center mb-16 md:mb-24 relative group cursor-default select-none">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[40vh] bg-gradient-glow opacity-40 blur-3xl -z-10"></div>
                 
-                <!-- Floating Elements -->
-                <div class="absolute top-1/4 left-10 w-24 h-24 md:w-48 md:h-48 border-4 border-black bg-neo-main rounded-full shadow-neo float-anim opacity-80"></div>
-                <div class="absolute bottom-1/4 right-10 w-32 h-32 md:w-64 md:h-64 border-4 border-black bg-neo-purple rotate-12 shadow-neo float-anim-reverse z-10"></div>
-                <div class="absolute top-1/2 right-1/4 w-16 h-16 border-4 border-black bg-neo-accent shadow-neo-sm"></div>
+                <h1 class="hero-text opacity-0 reveal-text cursor-none">
+                    LEIFIYO
+                </h1>
+            </header>
 
-                <div class="relative z-20 text-center mix-blend-normal">
-                    <div class="overflow-hidden">
-                        <h1 class="hero-text font-display font-bold text-[12vw] leading-[0.85] tracking-tighter text-black">
-                            WE MAKE
-                        </h1>
-                    </div>
-                    <div class="overflow-hidden">
-                        <h1 class="hero-text font-display font-bold text-[12vw] leading-[0.85] tracking-tighter text-neo-blue text-outline">
-                            DIGITAL
-                        </h1>
-                    </div>
-                    <div class="overflow-hidden">
-                        <h1 class="hero-text font-display font-bold text-[12vw] leading-[0.85] tracking-tighter text-black">
-                            NOISE.
-                        </h1>
-                    </div>
+            <!-- BENTO GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+
+                <!-- 1. INSTAGRAM -->
+                <div id="insta-btn" class="md:col-span-2 lg:col-span-2 lg:row-span-2 glass-panel rounded-3xl p-8 relative overflow-hidden group hover-trigger tilt-card h-[400px] lg:h-[500px] cursor-pointer">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent"></div>
                     
-                    <p class="hero-sub mt-8 font-body text-xl md:text-2xl font-bold max-w-md mx-auto bg-white border-4 border-black p-4 shadow-neo rotate-2">
-                        Anti-boring web experiences for brands that hate playing it safe.
-                    </p>
-                </div>
-
-                <!-- Scroll Indicator -->
-                <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-                    <i data-lucide="arrow-down" class="w-12 h-12 text-black stroke-[3]"></i>
-                </div>
-            </section>
-
-            <!-- MARQUEE -->
-            <div class="w-full bg-neo-accent border-b-4 border-black py-6 overflow-hidden flex items-center transform -skew-y-2 origin-left mt-[-4px] z-30 relative">
-                <div class="marquee-container font-heavy text-4xl md:text-6xl text-black uppercase tracking-widest">
-                    <div class="marquee-content">
-                        /// NO TEMPLATES ALLOWED /// BRUTAL SIMPLICITY /// PIXEL PERFECTION IS DEAD /// LONG LIVE THE GLITCH /// DESIGN IS CHAOS /// 
-                        /// NO TEMPLATES ALLOWED /// BRUTAL SIMPLICITY /// PIXEL PERFECTION IS DEAD /// LONG LIVE THE GLITCH /// DESIGN IS CHAOS /// 
+                    <div class="relative z-10 h-full flex flex-col justify-between tilt-inner">
+                        <div class="flex justify-between items-start">
+                            <i class="ri-instagram-fill text-4xl text-white"></i>
+                            <div class="border border-white/20 rounded-full px-3 py-1 backdrop-blur-md flex items-center gap-2">
+                                <div class="w-2 h-2 bg-toxic rounded-full animate-pulse"></div>
+                                <span class="font-code text-xs text-white">Select Feed</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="font-display text-5xl lg:text-7xl font-bold mb-2 text-white group-hover:text-toxic transition-colors duration-300 tracking-tight">INSTAGRAM</h2>
+                            <p class="font-code text-gray-400 text-sm">/// CLICK_TO_ACCESS_ARCHIVES</p>
+                        </div>
                     </div>
                 </div>
+
+                <!-- 2. DISCORD -->
+                <div id="discord-btn" class="md:col-span-2 lg:col-span-2 glass-panel rounded-3xl p-8 relative overflow-hidden group hover-trigger cursor-pointer tilt-card h-[240px]">
+                    <div class="absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-100 transition-opacity">
+                        <i class="ri-arrow-right-up-line text-2xl"></i>
+                    </div>
+                    <div class="h-full flex flex-col justify-center items-center relative z-10 tilt-inner">
+                        <i class="ri-discord-fill text-6xl mb-4 text-[#5865F2] group-hover:scale-110 transition-transform duration-300"></i>
+                        <h2 class="font-display text-3xl font-bold uppercase">Connect</h2>
+                        <p class="font-code text-xs text-gray-500 mt-2 group-hover:text-toxic transition-colors">CLICK TO REVEAL ID</p>
+                    </div>
+                </div>
+
+                <!-- 3. STEAM -->
+                <a href="https://steamcommunity.com/id/Zydiaa/" class="md:col-span-1 glass-panel rounded-3xl p-6 relative overflow-hidden group hover-trigger tilt-card h-[240px] flex flex-col justify-between bg-[#171a21]/50 external-link">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-[#66c0f4] blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <i class="ri-steam-fill text-5xl text-[#66c0f4]"></i>
+                    <div class="tilt-inner">
+                        <h3 class="font-display text-xl font-bold">STEAM</h3>
+                        <div class="w-full bg-gray-800 h-1 mt-3 rounded-full overflow-hidden">
+                            <div class="bg-[#66c0f4] w-[85%] h-full"></div>
+                        </div>
+                        <p class="font-code text-[10px] text-gray-400 mt-1">LEVEL 100</p>
+                    </div>
+                </a>
+
+                <!-- 4. X / TWITTER -->
+                <a href="https://x.com/leifiyo" class="md:col-span-1 glass-panel rounded-3xl p-6 relative overflow-hidden group hover-trigger tilt-card h-[240px] flex flex-col justify-between bg-white/5 external-link">
+                    <i class="ri-twitter-x-line text-5xl group-hover:rotate-12 transition-transform"></i>
+                    <div class="tilt-inner">
+                        <h3 class="font-display text-xl font-bold">X_CORP</h3>
+                        <p class="font-code text-xs text-gray-400 mt-1">@LEIFIYO</p>
+                    </div>
+                </a>
+
+                <!-- 5. MUSIC -->
+                <a href="https://music.apple.com/profile/yoleiyyo" class="md:col-span-2 glass-panel rounded-3xl p-6 flex items-center gap-6 group hover-trigger tilt-card relative overflow-hidden external-link">
+                    <div class="absolute bottom-0 left-0 w-full h-full flex items-end justify-center gap-1 opacity-10 pointer-events-none px-8 pb-4">
+                        <div class="w-full bg-toxic h-8 animate-[bounce_1s_infinite]"></div>
+                        <div class="w-full bg-toxic h-12 animate-[bounce_1.2s_infinite]"></div>
+                        <div class="w-full bg-toxic h-6 animate-[bounce_0.8s_infinite]"></div>
+                        <div class="w-full bg-toxic h-16 animate-[bounce_1.5s_infinite]"></div>
+                        <div class="w-full bg-toxic h-10 animate-[bounce_1.1s_infinite]"></div>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-zinc-900 border border-gray-700 flex items-center justify-center shrink-0 group-hover:border-toxic transition-colors">
+                        <i class="ri-apple-fill text-3xl"></i>
+                    </div>
+                    <div class="tilt-inner z-10">
+                        <p class="font-code text-[10px] text-toxic uppercase tracking-widest mb-1">Now Playing</p>
+                        <h3 class="font-display text-2xl font-bold leading-none group-hover:translate-x-2 transition-transform">Apple Music</h3>
+                    </div>
+                    <div class="ml-auto">
+                        <i class="ri-play-circle-line text-4xl opacity-50 group-hover:opacity-100 group-hover:text-toxic transition-all"></i>
+                    </div>
+                </a>
+
+                <!-- 6. SNAPCHAT -->
+                <a href="https://www.snapchat.com/@yoleiyyo" class="md:col-span-1 glass-panel rounded-3xl p-6 flex flex-col items-center justify-center gap-2 group hover-trigger tilt-card bg-[#FFFC00]/10 hover:bg-[#FFFC00]/20 transition-colors external-link">
+                    <i class="ri-snapchat-fill text-5xl text-[#FFFC00] drop-shadow-[0_0_10px_rgba(255,252,0,0.5)]"></i>
+                    <span class="font-display font-bold uppercase text-sm">Snapchat</span>
+                </a>
+
+                <!-- 7. TIKTOK -->
+                <a href="https://www.tiktok.com/@leifiyo" class="md:col-span-1 glass-panel rounded-3xl p-6 flex flex-col items-center justify-center gap-2 group hover-trigger tilt-card relative overflow-hidden external-link">
+                    <div class="absolute inset-0 bg-gradient-to-br from-tiktok-cyan/20 to-tiktok-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10 flex flex-col items-center">
+                        <div class="relative">
+                            <i class="ri-tiktok-fill text-4xl text-white absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] text-tiktok-cyan mix-blend-screen opacity-0 group-hover:opacity-100 transition-all"></i>
+                            <i class="ri-tiktok-fill text-4xl text-white relative z-10"></i>
+                            <i class="ri-tiktok-fill text-4xl text-white absolute top-0 left-0 translate-x-[2px] translate-y-[2px] text-tiktok-pink mix-blend-screen opacity-0 group-hover:opacity-100 transition-all"></i>
+                        </div>
+                        <span class="font-display font-bold uppercase text-sm mt-2">TikTok</span>
+                    </div>
+                </a>
+
             </div>
 
-            <!-- MANIFESTO SECTION -->
-            <section id="about" class="relative py-32 px-4 md:px-12 bg-neo-black text-neo-bg overflow-hidden">
-                <div class="absolute top-0 right-0 w-1/2 h-full bg-neo-purple opacity-20 clip-polygon"></div>
-                
-                <div class="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10">
-                    <div class="md:col-span-5">
-                        <div class="sticky top-32">
-                            <h2 class="font-heavy text-6xl md:text-8xl mb-6 text-neo-accent">THE<br>MANIFESTO</h2>
-                            <div class="w-full h-4 bg-neo-main border-2 border-white shadow-[4px_4px_0px_0px_#ffffff]"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="md:col-span-7 space-y-12 text-xl md:text-3xl font-bold leading-snug">
-                        <p class="manifesto-text opacity-20">
-                            We believe the internet has become a sterile hospital hallway. Everything is round, soft, and safe. <span class="text-neo-main bg-white px-2">We are the sledgehammer.</span>
-                        </p>
-                        <p class="manifesto-text opacity-20">
-                            Dorksense isn't about making sense. It's about making feelings. We utilize raw aesthetics to trigger dopamine receptors you didn't know you had.
-                        </p>
-                        <p class="manifesto-text opacity-20">
-                            Ugly is the new beautiful. Wrong is the new right. If your website doesn't look like it might crash the browser, you aren't trying hard enough.
-                        </p>
-
-                        <!-- Stats Box -->
-                        <div class="grid grid-cols-2 gap-4 mt-12">
-                            <div class="bg-neo-bg text-black border-4 border-white p-6 shadow-[8px_8px_0px_0px_#A3FF00] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-none stats-card">
-                                <h3 class="font-heavy text-5xl">99%</h3>
-                                <p class="text-sm font-mono uppercase mt-2">Chaos Factor</p>
-                            </div>
-                            <div class="bg-neo-main text-white border-4 border-white p-6 shadow-[8px_8px_0px_0px_#9D00FF] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-none stats-card">
-                                <h3 class="font-heavy text-5xl">0%</h3>
-                                <p class="text-sm font-mono uppercase mt-2">Subtlety</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SERVICES / GRID SECTION -->
-            <section class="py-20 bg-neo-blue border-t-4 border-black">
-                <div class="container mx-auto px-4">
-                    <div class="flex justify-between items-end mb-16 border-b-4 border-black pb-4">
-                        <h2 class="font-heavy text-5xl md:text-7xl text-white">OUR TOOLKIT</h2>
-                        <i data-lucide="wrench" class="w-12 h-12 text-neo-accent stroke-[3] animate-spin-slow"></i>
-                    </div>
-
-                    <!-- Bento Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-[300px]">
-                        
-                        <!-- Card 1 -->
-                        <div class="service-card bg-neo-bg border-4 border-black shadow-neo p-8 flex flex-col justify-between md:col-span-2 hover:bg-neo-accent transition-colors duration-300 group">
-                            <div class="flex justify-between items-start">
-                                <h3 class="font-heavy text-4xl uppercase">Web<br>Brutalism</h3>
-                                <i data-lucide="layout-grid" class="w-10 h-10 stroke-[3] group-hover:rotate-90 transition-transform duration-500"></i>
-                            </div>
-                            <p class="font-bold text-lg mt-4 border-t-2 border-black pt-4">
-                                Creating layouts that defy grid systems and user expectations.
-                            </p>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div class="service-card bg-neo-main border-4 border-black shadow-neo p-8 flex flex-col justify-center items-center text-center rotate-1 hover:rotate-0 transition-transform duration-300">
-                            <i data-lucide="zap" class="w-20 h-20 text-black fill-white mb-4 stroke-[3]"></i>
-                            <h3 class="font-display font-bold text-2xl text-white">HIGH VOLTAGE<br>DEVELOPMENT</h3>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="service-card bg-neo-black border-4 border-black shadow-neo p-8 flex flex-col justify-between text-white hover:shadow-none hover:translate-x-[8px] hover:translate-y-[8px] transition-all">
-                            <h3 class="font-heavy text-3xl text-neo-purple">MOTION<br>DESIGN</h3>
-                            <p class="text-gray-400">Things moving when they shouldn't.</p>
-                        </div>
-
-                        <!-- Card 4 -->
-                        <div class="service-card bg-white border-4 border-black shadow-neo p-0 overflow-hidden md:col-span-2 relative group">
-                            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-500"></div>
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <h3 class="font-heavy text-5xl text-white -rotate-6">VISUAL CHAOS</h3>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-            <!-- INTERACTIVE SECTION -->
-            <section class="py-32 bg-neo-bg flex flex-col items-center justify-center text-center overflow-hidden relative">
-                <div class="absolute inset-0 grid grid-cols-[repeat(20,1fr)] grid-rows-[repeat(20,1fr)] opacity-10 pointer-events-none">
-                    <!-- Generated grid lines via JS later or simple CSS -->
-                </div>
-                
-                <h2 class="font-display font-bold text-4xl md:text-6xl mb-12 z-10">ARE YOU BRAVE?</h2>
-                
-                <button id="danger-btn" class="relative group">
-                    <div class="absolute inset-0 bg-black translate-x-4 translate-y-4 transition-transform group-hover:translate-x-6 group-hover:translate-y-6"></div>
-                    <div class="relative border-4 border-black bg-neo-main px-12 py-8 font-heavy text-4xl md:text-6xl text-white hover:-translate-y-2 hover:-translate-x-2 active:translate-x-2 active:translate-y-2 transition-transform duration-100 flex items-center gap-4">
-                        <i data-lucide="skull" class="w-12 h-12 stroke-[3]"></i>
-                        DO NOT CLICK
-                    </div>
-                </button>
-
-                <div id="confetti-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
-            </section>
-
-            <!-- FOOTER -->
-            <footer class="bg-black text-neo-bg pt-20 pb-10 px-4 border-t-8 border-neo-accent">
-                <div class="container mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        <div>
-                            <h1 class="font-heavy text-[15vw] md:text-[10vw] leading-none text-neo-bg select-none">DORK.</h1>
-                        </div>
-                        <div class="flex flex-col justify-end items-start md:items-end space-y-6">
-                            <a href="#" class="text-4xl font-display hover:text-neo-accent hover:ml-4 transition-all">INSTAGRAM -></a>
-                            <a href="#" class="text-4xl font-display hover:text-neo-accent hover:ml-4 transition-all">TWITTER -></a>
-                            <a href="#" class="text-4xl font-display hover:text-neo-accent hover:ml-4 transition-all">GITHUB -></a>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-20 pt-10 border-t-2 border-white/20 flex flex-col md:flex-row justify-between items-center text-sm font-mono">
-                        <p>© 2025 DORKSENSE INDUSTRIES. ALL RIGHTS RESERVED.</p>
-                        <p class="mt-4 md:mt-0">MADE WITH <span class="text-neo-main">♥</span> AND TOO MUCH CAFFEINE.</p>
-                    </div>
-                </div>
+            <footer class="mt-24 text-center">
+                <p class="font-code text-xs text-gray-600">SYSTEM.VERSION.3.5 /// LEIFIYO © 2025</p>
             </footer>
-
         </div>
     </main>
 
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/lenis@1.0.29/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- MODALS -->
+    <div id="discord-modal" class="fixed inset-0 z-50 bg-void/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-8 border border-gray-700 transform scale-90 translate-y-10 transition-all duration-500 relative overflow-hidden modal-content">
+            <div class="relative z-10 text-center">
+                <div class="w-20 h-20 bg-[#5865F2] rounded-2xl mx-auto flex items-center justify-center shadow-[0_0_30px_rgba(88,101,242,0.4)] mb-6">
+                    <i class="ri-discord-fill text-5xl text-white"></i>
+                </div>
+                <h3 class="font-display text-3xl font-bold text-white mb-2">ADD USER</h3>
+                <div class="bg-black/50 border border-gray-700 rounded-xl p-2 flex items-center justify-between pl-4 group hover:border-toxic transition-colors mt-8">
+                    <code id="discord-id" class="font-code text-lg text-white">zydiaa</code>
+                    <button id="copy-btn" class="bg-white text-black font-display font-bold px-4 py-2 rounded-lg hover:bg-toxic hover:scale-105 transition-all">COPY</button>
+                </div>
+                <button class="close-modal mt-8 text-xs font-code text-gray-500 hover:text-white underline decoration-toxic underline-offset-4">[CLOSE_TERMINAL]</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="insta-modal" class="fixed inset-0 z-50 bg-void/95 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="w-full max-w-3xl transform scale-95 transition-transform duration-500 modal-content">
+            <div class="flex flex-col items-center mb-8">
+                <h2 class="font-display text-4xl text-white mb-2">SELECT DESTINATION</h2>
+                <p class="font-code text-toxic text-xs">/// CHOOSE_YOUR_REALITY</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Public Option -->
+                <a href="https://www.instagram.com/leifiyo/" class="glass-panel p-10 rounded-2xl border border-white/10 hover:border-white/40 group hover:bg-white/5 transition-all text-center flex flex-col items-center gap-4 external-link">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-purple-600 to-orange-500 p-[2px]">
+                        <div class="w-full h-full rounded-full bg-black flex items-center justify-center">
+                             <i class="ri-earth-fill text-4xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold">PUBLIC FEED</h3>
+                    <div class="mt-4 px-4 py-2 border border-white text-xs font-code rounded-full group-hover:bg-white group-hover:text-black transition-colors">ENTER_VISUALS</div>
+                </a>
+                <!-- Private Option -->
+                <a href="https://www.instagram.com/leifiyo.vip/" class="glass-panel p-10 rounded-2xl border border-red-500/20 hover:border-red-500 group hover:bg-red-900/10 transition-all text-center flex flex-col items-center gap-4 external-link">
+                    <div class="w-24 h-24 rounded-full border-2 border-red-500 p-[2px]">
+                        <div class="w-full h-full rounded-full bg-black flex items-center justify-center">
+                             <i class="ri-lock-fill text-4xl text-red-500"></i>
+                        </div>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-red-500">PRIVATE FEED</h3>
+                    <div class="mt-4 px-4 py-2 border border-red-500 text-red-500 text-xs font-code rounded-full group-hover:bg-red-500 group-hover:text-black transition-colors">REQUEST_ACCESS</div>
+                </a>
+            </div>
+            <div class="text-center mt-12">
+                 <button class="close-modal text-xs font-code text-gray-500 hover:text-white underline decoration-toxic underline-offset-4">[ABORT_MISSION]</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // --- 1. LOADING ANIMATION (Count up) ---
+        const loaderText = document.getElementById('loader-text');
+        const preloader = document.getElementById('preloader');
+        let progress = 0;
 
-        // --- 1. Preloader Logic ---
-        const tlLoader = gsap.timeline();
+        const frame = () => {
+            progress += 1;
+            if (progress > 100) progress = 100;
+            if (loaderText) loaderText.innerText = progress + '%';
 
-        tlLoader.to(".loader-bar", {
-            height: "100%",
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power4.inOut"
-        })
-        .to("#loader h1", {
-            opacity: 0,
-            duration: 0.2
-        })
-        .to("#loader", {
-            y: "-100%",
-            duration: 0.8,
-            ease: "power4.inOut"
-        }, "-=0.2")
-        .from(".hero-text", {
-            y: 200,
-            opacity: 0,
-            rotate: 5,
-            stagger: 0.1,
-            duration: 1,
-            ease: "power3.out"
-        }, "-=0.5");
-
-        // --- 2. Smooth Scroll Setup (Lenis) ---
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            smooth: true,
-            mouseMultiplier: 1,
-            smoothTouch: false,
-            touchMultiplier: 2,
-        });
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        // Connect Lenis to GSAP ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
-        
-        // --- 3. GSAP Animations ---
-
-        // Floating elements parallax
-        gsap.to(".float-anim", {
-            y: -100,
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom top",
-                scrub: 1
+            if (progress < 100) {
+                const delay = Math.floor(Math.random() * 10) + 5; 
+                setTimeout(frame, delay);
+            } else {
+                setTimeout(() => {
+                    preloader.classList.add('loaded');
+                    if (typeof gsap !== 'undefined') {
+                        gsap.to('.reveal-text', { y: 0, opacity: 1, duration: 1.5, ease: "power4.out", delay: 0.5 });
+                    } else {
+                        document.querySelectorAll('.reveal-text').forEach(el => el.style.opacity = '1');
+                    }
+                }, 300);
             }
-        });
-        gsap.to(".float-anim-reverse", {
-            y: 150,
-            rotate: 45,
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom top",
-                scrub: 1.5
-            }
-        });
+        };
+        frame();
 
-        // Manifesto Text Reveal
-        const manifestoTexts = document.querySelectorAll(".manifesto-text");
-        manifestoTexts.forEach(text => {
-            gsap.to(text, {
-                opacity: 1,
-                scrollTrigger: {
-                    trigger: text,
-                    start: "top 80%",
-                    end: "top 40%",
-                    scrub: true
-                }
-            });
-        });
+        setTimeout(() => { if (!preloader.classList.contains('loaded')) preloader.classList.add('loaded'); }, 3000);
 
-        // Stats Cards Hover Effect (Magnetic-ish via GSAP)
-        document.querySelectorAll('.stats-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+        // --- 2. EXIT ANIMATION (Green Swipe + 1s Delay + New Tab) ---
+        document.querySelectorAll('.external-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                let targetUrl = link.getAttribute('href');
+
+                const tl = gsap.timeline();
                 
-                gsap.to(card, {
-                    x: (x - rect.width / 2) / 5,
-                    y: (y - rect.height / 2) / 5,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    x: 0,
-                    y: 0,
+                // 1. Swipe Up Green Screen
+                tl.to('.page-loader', {
+                    scaleY: 1,
                     duration: 0.5,
-                    ease: "elastic.out(1, 0.5)"
+                    ease: "power4.inOut",
+                })
+                // 2. Show "REDIRECTING"
+                .to('.loader-text', {
+                    opacity: 1,
+                    duration: 0.1
+                }, "-=0.1")
+                // 3. WAIT 1 SECOND
+                .to({}, { duration: 1.0 })
+                // 4. Open New Tab & Reset Logic
+                .call(() => {
+                    window.open(targetUrl, '_blank');
+                })
+                // 5. Hide Text & Swipe Down (To reset current page)
+                .to('.loader-text', { opacity: 0, duration: 0.2 })
+                .to('.page-loader', {
+                    scaleY: 0,
+                    transformOrigin: "top",
+                    duration: 0.5,
+                    ease: "power4.inOut"
+                })
+                .set('.page-loader', { transformOrigin: "bottom" });
+            });
+        });
+
+        // --- 3. CURSOR ---
+        if (window.matchMedia("(hover: hover)").matches) {
+            const cursor = document.getElementById('cursor'), dot = document.querySelector('.cursor-dot'), ring = document.querySelector('.cursor-ring');
+            let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2, ringX = mouseX, ringY = mouseY;
+            window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; if(dot) { dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px'; } });
+            const animate = () => { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; if(ring) { ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px'; } requestAnimationFrame(animate); };
+            animate();
+            document.querySelectorAll('.hover-trigger, a, button').forEach(el => {
+                el.addEventListener('mouseenter', () => { if(ring) { ring.style.width='60px'; ring.style.height='60px'; ring.style.backgroundColor='rgba(255,255,255,0.1)'; ring.style.borderColor='transparent'; } });
+                el.addEventListener('mouseleave', () => { if(ring) { ring.style.width='40px'; ring.style.height='40px'; ring.style.backgroundColor='transparent'; ring.style.borderColor='rgba(204,255,0,0.5)'; } });
+            });
+        }
+
+        // --- 4. 3D TILT ---
+        if (window.matchMedia("(hover: hover)").matches) {
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const r = card.getBoundingClientRect();
+                    card.style.transform = `perspective(1000px) rotateX(${((e.clientY-r.top-r.height/2)/r.height/2)*-5}deg) rotateY(${((e.clientX-r.left-r.width/2)/r.width/2)*5}deg) scale3d(1.02,1.02,1.02)`;
                 });
+                card.addEventListener('mouseleave', () => card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)');
             });
-        });
+        }
 
-        // Service Cards Stagger Entry
-        gsap.from(".service-card", {
-            y: 100,
-            opacity: 0,
-            rotate: 5,
-            stagger: 0.1,
-            duration: 0.8,
-            ease: "back.out(1.7)",
-            scrollTrigger: {
-                trigger: ".service-card",
-                start: "top 85%"
-            }
-        });
+        // --- 5. MODALS ---
+        const openModal=(id)=>{const m=document.getElementById(id),c=m.querySelector('.modal-content');m.classList.remove('opacity-0','pointer-events-none');if(c)c.classList.remove('scale-90','translate-y-10','scale-95')};
+        const closeModal=()=>{document.querySelectorAll('[id$="-modal"]').forEach(m=>{m.classList.add('opacity-0','pointer-events-none');const c=m.querySelector('.modal-content');if(c)c.classList.add('scale-90','translate-y-10','scale-95')})};
 
-        // --- 4. Custom Cursor Logic ---
-        const cursor = document.getElementById('cursor');
-        const links = document.querySelectorAll('a, button, .service-card');
+        const db=document.getElementById('discord-btn'), ib=document.getElementById('insta-btn');
+        if(db)db.addEventListener('click',()=>openModal('discord-modal'));
+        if(ib)ib.addEventListener('click',()=>openModal('insta-modal'));
+        document.querySelectorAll('.close-modal').forEach(b=>b.addEventListener('click',closeModal));
+        document.querySelectorAll('[id$="-modal"]').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal()}));
 
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-
-        // Hover effects for cursor
-        links.forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursor.style.width = '60px';
-                cursor.style.height = '60px';
-                cursor.style.backgroundColor = '#A3FF00'; // Neo accent
-                cursor.style.mixBlendMode = 'exclusion';
-            });
-            link.addEventListener('mouseleave', () => {
-                cursor.style.width = '24px';
-                cursor.style.height = '24px';
-                cursor.style.backgroundColor = '#0f0f0f';
-                cursor.style.mixBlendMode = 'difference';
-            });
-        });
-
-        // --- 5. Button Interaction (Confetti) ---
-        const dangerBtn = document.getElementById('danger-btn');
+        const cb=document.getElementById('copy-btn'), did=document.getElementById('discord-id');
+        if(cb&&did)cb.addEventListener('click',()=>{navigator.clipboard.writeText(did.innerText);const t=cb.innerText;cb.innerText="OK";cb.classList.replace('bg-white','bg-toxic');cb.classList.replace('text-black','text-black');setTimeout(()=>{cb.innerText=t;cb.classList.replace('bg-toxic','bg-white')},2000)});
         
-        dangerBtn.addEventListener('click', () => {
-            // Shake Screen
-            gsap.to("body", {
-                x: -10,
-                duration: 0.1,
-                yoyo: true,
-                repeat: 5
-            });
-
-            // Confetti Explosion
-            var duration = 2 * 1000;
-            var end = Date.now() + duration;
-
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#FF4D00', '#A3FF00', '#9D00FF']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#FF4D00', '#A3FF00', '#9D00FF']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-
-            // Change text temporarily
-            const originalContent = dangerBtn.innerHTML;
-            dangerBtn.innerHTML = '<div class="relative border-4 border-black bg-neo-black px-12 py-8 font-heavy text-4xl md:text-6xl text-white flex items-center gap-4">OH NO!</div>';
-            
-            setTimeout(() => {
-                dangerBtn.innerHTML = originalContent;
-                lucide.createIcons(); // Re-init icons
-            }, 3000);
-        });
-
+        try{if(typeof Lenis!=='undefined')requestAnimationFrame(function raf(t){new Lenis().raf(t);requestAnimationFrame(raf)})}catch(e){}
     </script>
 </body>
 </html>
