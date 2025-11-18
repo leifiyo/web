@@ -60,6 +60,7 @@
     <style>
         :root { --cursor-size: 20px; }
         
+        /* RESET & SCROLL FIXES */
         html {
             height: 100%;
             overflow-x: hidden;
@@ -69,7 +70,7 @@
             background-color: #050505;
             color: #e0e0e0;
             overflow-x: hidden;
-            min-height: 100vh; /* FIX: Erlaubt Scrollen auf Mobile */
+            min-height: 100vh;
             width: 100%;
             position: relative;
         }
@@ -84,7 +85,7 @@
             opacity: 0.05; pointer-events: none; z-index: 50;
         }
 
-        /* --- CURSOR (Nur Desktop) --- */
+        /* --- CURSOR (Desktop Only) --- */
         @media (hover: hover) and (pointer: fine) {
             body { cursor: none; }
             #cursor {
@@ -163,7 +164,7 @@
         }
         .preloader.loaded { 
             clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); 
-            pointer-events: none; /* WICHTIG: Damit man danach klicken kann */
+            pointer-events: none;
         }
         
         .scan-line {
@@ -188,6 +189,12 @@
             font-size: 10vw; 
             color: black;
             opacity: 0;
+        }
+        
+        /* MODAL SCROLL FIX */
+        .modal-wrap {
+            overflow-y: auto; 
+            max-height: 100vh;
         }
 
         ::selection { background: #ccff00; color: #000; }
@@ -342,13 +349,13 @@
             </div>
 
             <footer class="mt-24 text-center">
-                <p class="font-code text-xs text-gray-600">SYSTEM.VERSION.3.6 /// LEIFIYO © 2025</p>
+                <p class="font-code text-xs text-gray-600">SYSTEM.VERSION.3.7 /// LEIFIYO © 2025</p>
             </footer>
         </div>
     </main>
 
-    <!-- MODALS -->
-    <div id="discord-modal" class="fixed inset-0 z-50 bg-void/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <!-- MODALS (Fixed Scroll) -->
+    <div id="discord-modal" class="fixed inset-0 z-50 bg-void/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4 modal-wrapper">
         <div class="glass-panel w-full max-w-md rounded-3xl p-8 border border-gray-700 transform scale-90 translate-y-10 transition-all duration-500 relative overflow-hidden modal-content">
             <div class="relative z-10 text-center">
                 <div class="w-20 h-20 bg-[#5865F2] rounded-2xl mx-auto flex items-center justify-center shadow-[0_0_30px_rgba(88,101,242,0.4)] mb-6">
@@ -364,13 +371,13 @@
         </div>
     </div>
 
-    <div id="insta-modal" class="fixed inset-0 z-50 bg-void/95 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-        <div class="w-full max-w-3xl transform scale-95 transition-transform duration-500 modal-content">
-            <div class="flex flex-col items-center mb-8">
+    <div id="insta-modal" class="fixed inset-0 z-50 bg-void/95 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4 modal-wrapper">
+        <div class="w-full max-w-3xl transform scale-95 transition-transform duration-500 modal-content max-h-full overflow-y-auto">
+            <div class="flex flex-col items-center mb-8 mt-10"> <!-- Added top margin for mobile scroll -->
                 <h2 class="font-display text-4xl text-white mb-2">SELECT DESTINATION</h2>
                 <p class="font-code text-toxic text-xs">/// CHOOSE_YOUR_REALITY</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-10"> <!-- Added bottom padding -->
                 <!-- Public Option -->
                 <a href="https://www.instagram.com/leifiyo/" class="glass-panel p-10 rounded-2xl border border-white/10 hover:border-white/40 group hover:bg-white/5 transition-all text-center flex flex-col items-center gap-4 external-link">
                     <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-purple-600 to-orange-500 p-[2px]">
@@ -392,7 +399,7 @@
                     <div class="mt-4 px-4 py-2 border border-red-500 text-red-500 text-xs font-code rounded-full group-hover:bg-red-500 group-hover:text-black transition-colors">REQUEST_ACCESS</div>
                 </a>
             </div>
-            <div class="text-center mt-12">
+            <div class="text-center mb-10">
                  <button class="close-modal text-xs font-code text-gray-500 hover:text-white underline decoration-toxic underline-offset-4">[ABORT_MISSION]</button>
             </div>
         </div>
@@ -428,7 +435,7 @@
         // Fallback
         setTimeout(() => { if (!preloader.classList.contains('loaded')) preloader.classList.add('loaded'); }, 3000);
 
-        // --- 2. EXIT ANIMATION LOGIC (GREEN SWIPE) ---
+        // --- 2. EXIT ANIMATION LOGIC (Fix for Links) ---
         document.querySelectorAll('.external-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -449,19 +456,10 @@
                 }, "-=0.1")
                 // 3. WAIT 1 SECOND
                 .to({}, { duration: 1.0 })
-                // 4. Open New Tab
+                // 4. REDIRECT (SAME TAB to prevent popup blocking)
                 .call(() => {
-                    window.open(targetUrl, '_blank');
-                })
-                // 5. Hide Text & Swipe Down (Reset)
-                .to('.loader-text', { opacity: 0, duration: 0.2 })
-                .to('.page-loader', {
-                    scaleY: 0,
-                    transformOrigin: "top",
-                    duration: 0.5,
-                    ease: "power4.inOut"
-                })
-                .set('.page-loader', { transformOrigin: "bottom" });
+                    window.location.href = targetUrl;
+                });
             });
         });
 
@@ -490,18 +488,45 @@
         }
 
         // --- 5. MODALS ---
-        const openModal=(id)=>{const m=document.getElementById(id),c=m.querySelector('.modal-content');m.classList.remove('opacity-0','pointer-events-none');if(c)c.classList.remove('scale-90','translate-y-10','scale-95')};
-        const closeModal=()=>{document.querySelectorAll('[id$="-modal"]').forEach(m=>{m.classList.add('opacity-0','pointer-events-none');const c=m.querySelector('.modal-content');if(c)c.classList.add('scale-90','translate-y-10','scale-95')})};
+        // Fix for Modal Scrolling
+        const openModal = (id) => {
+            const m = document.getElementById(id);
+            const c = m.querySelector('.modal-content');
+            
+            m.classList.remove('opacity-0', 'pointer-events-none');
+            if(c) c.classList.remove('scale-90', 'translate-y-10', 'scale-95');
+            
+            // Disable body scroll when modal is open to prevent double scrolling
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeModal = () => {
+            document.querySelectorAll('[id$="-modal"]').forEach(m => {
+                m.classList.add('opacity-0', 'pointer-events-none');
+                const c = m.querySelector('.modal-content');
+                if(c) c.classList.add('scale-90', 'translate-y-10', 'scale-95');
+            });
+            // Re-enable body scroll
+            document.body.style.overflow = 'auto'; // or 'hidden' if you want simple fix
+            document.body.style.overflowX = 'hidden';
+        };
 
         const db=document.getElementById('discord-btn'), ib=document.getElementById('insta-btn');
         if(db)db.addEventListener('click',()=>openModal('discord-modal'));
         if(ib)ib.addEventListener('click',()=>openModal('insta-modal'));
+        
         document.querySelectorAll('.close-modal').forEach(b=>b.addEventListener('click',closeModal));
-        document.querySelectorAll('[id$="-modal"]').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal()}));
+        
+        // Close modal on background click
+        document.querySelectorAll('[id$="-modal"]').forEach(m=>m.addEventListener('click',e=>{
+            // Ensure we are clicking the wrapper, not the content
+            if(e.target===m || e.target.classList.contains('modal-wrapper')) closeModal();
+        }));
 
         const cb=document.getElementById('copy-btn'), did=document.getElementById('discord-id');
         if(cb&&did)cb.addEventListener('click',()=>{navigator.clipboard.writeText(did.innerText);const t=cb.innerText;cb.innerText="OK";cb.classList.replace('bg-white','bg-toxic');cb.classList.replace('text-black','text-black');setTimeout(()=>{cb.innerText=t;cb.classList.replace('bg-toxic','bg-white')},2000)});
         
+        // Lenis Scroll Init
         try{if(typeof Lenis!=='undefined')new Lenis({duration:1.2,smooth:true}).on('scroll',ScrollTrigger.update);gsap.ticker.add((time)=>{lenis.raf(time*1000)});gsap.ticker.lagSmoothing(0)}catch(e){}
     </script>
 </body>
